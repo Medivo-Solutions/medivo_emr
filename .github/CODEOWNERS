@@ -1,0 +1,1 @@
+# Medivo EMR Code Owners\n\n# Default code owner for all files\n* @tech-admin-dev\n\n# Specific team assignments (customize as needed)\n# /src/backend/ @Medivo-Solutions/backend-team\n# /src/frontend/ @Medivo-Solutions/frontend-team\n# /docs/ @Medivo-Solutions/tech-writers\n# .github/ @Medivo-Solutions/devops\n
