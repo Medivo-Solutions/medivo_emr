@@ -1,6 +1,6 @@
 # Medivo UDHP — GitHub Platform Status Report
 
-**Date:** 2026-06-20 | **Organization:** [Medivo-Solutions](https://github.com/Medivo-Solutions) | **Plan:** GitHub Free (2 members)
+**Date:** 2026-06-20 (Updated) | **Organization:** [Medivo-Solutions](https://github.com/Medivo-Solutions) | **Plan:** GitHub Free (2 members)
 
 ---
 
@@ -9,8 +9,8 @@
 | Repository | Visibility | Commits | PRs Merged | Open PRs | Purpose |
 |---|---|---|---|---|---|
 | [alberta-emr-aws](https://github.com/Medivo-Solutions/alberta-emr-aws) | Private | 30 | 15 | 0 | AWS EMR platform (ca-central-1) |
-| [alberta-emr-gcp](https://github.com/Medivo-Solutions/alberta-emr-gcp) | Private | 21 | 1 | 12 | GCP EMR platform (northamerica-northeast1) |
-| [medivo_emr](https://github.com/Medivo-Solutions/medivo_emr) | Public | 2 | 1 | 0 | Shared EMR codebase |
+| [alberta-emr-gcp](https://github.com/Medivo-Solutions/alberta-emr-gcp) | Private | 30 | 12 | 0 | GCP EMR platform (northamerica-northeast1) |
+| [medivo_emr](https://github.com/Medivo-Solutions/medivo_emr) | Public | 3 | 2 | 0 | Shared EMR codebase |
 
 ## Platform Separation (Completed)
 
@@ -35,10 +35,20 @@ The AWS and GCP deployment tracks are fully separated into dedicated repositorie
 | `audit.tf` | CloudTrail, S3 Object Lock WORM (10-year retention), Glacier lifecycle |
 | `security.tf` | Security Hub, GuardDuty, Macie, Cognito SMS role |
 | `github_oidc.tf` | GitHub Actions OIDC federation for CI/CD |
-| `providers.tf` / `variables.tf` / `outputs.tf` | Provider config (AWS ~> 6.51), variables, outputs |
+| `providers.tf` / `variables.tf` / `outputs.tf` | Provider config (AWS ~> 6.51, Terraform >= 1.8), variables, outputs |
 
 ### GCP (`alberta-emr-gcp/gcp/terraform/`) — 10 files
-`apigee.tf`, `assured_workloads.tf`, `chronicle.tf`, `dataflow.tf`, `dns.tf`, `load_balancer.tf`, `main.tf`, `mpi.tf`, `outputs.tf`, `variables.tf`
+| File | Resources |
+|---|---|
+| `main.tf` | Provider config (Google/Google-Beta ~> 7.37, Terraform >= 1.8), VPC, project APIs |
+| `apigee.tf` | Apigee API gateway |
+| `assured_workloads.tf` | Assured Workloads (compliance boundary) |
+| `chronicle.tf` | Chronicle SIEM |
+| `dataflow.tf` | Dataflow pipelines |
+| `dns.tf` | Cloud DNS |
+| `load_balancer.tf` | Cloud Load Balancing |
+| `mpi.tf` | Master Patient Index |
+| `outputs.tf` / `variables.tf` | Outputs and variables |
 
 ## CI/CD Pipelines
 
@@ -66,6 +76,40 @@ The AWS and GCP deployment tracks are fully separated into dedicated repositorie
 | Vulnerability alerts | **Enabled** (all repos) |
 | Dependabot security updates | **Enabled** (all repos) |
 | Dependency auto-updates | **Active** — GitHub Actions, Terraform providers, Python deps |
+
+## Dependency Management (Current Versions)
+
+All dependencies updated via Dependabot — 27 PRs merged across both repos (zero open).
+
+### GitHub Actions
+| Action | AWS | GCP |
+|---|---|---|
+| `actions/checkout` | v7 | v7 |
+| `actions/setup-python` | v6 | v6 |
+| `actions/setup-node` | v4 | v6 |
+| `actions/github-script` | v9 | v9 |
+| `hashicorp/setup-terraform` | v4 | v4 |
+| `aws-actions/configure-aws-credentials` | v6 | — |
+| `google-github-actions/auth` | — | v3 |
+
+### Terraform Providers
+| Provider | AWS | GCP |
+|---|---|---|
+| `hashicorp/aws` | ~> 6.51 | — |
+| `hashicorp/google` | — | ~> 7.37 |
+| `hashicorp/google-beta` | — | ~> 7.37 |
+| `hashicorp/random` | ~> 3.6 | ~> 3.6 |
+
+### Python Test Dependencies (key packages)
+| Package | AWS | GCP |
+|---|---|---|
+| `fastapi` | >=0.110.0 | >=0.138.0 |
+| `pydantic` | >=2.6.0 | >=2.13.4 |
+| `httpx` | >=0.28.1 | >=0.27.0 |
+| `botocore` | >=1.43.34 | >=1.34.0 |
+| `google-cloud-kms` | >=2.21.0 | >=3.13.0 |
+| `google-cloud-firestore` | >=2.27.0 | >=2.27.0 |
+| `google-api-python-client` | >=2.120.0 | >=2.197.0 |
 
 ## Enterprise Governance Configuration
 
@@ -103,6 +147,20 @@ The AWS and GCP deployment tracks are fully separated into dedicated repositorie
 | Service catalogue | `docs/services.md` | 12 ECS Fargate microservices |
 | Development instructions | `UDHP_Complete_Development_Instructions.md` | Full build/deploy/test guide |
 | README | `README.md` | Repo structure, quick start, compliance matrix, CI status |
+| Status report | `STATUS_REPORT.md` (medivo_emr) | Full platform status, artifacts, governance, dependencies |
+
+## Completed Actions
+
+| Action | Date | Details |
+|---|---|---|
+| Platform separation (AWS/GCP) | 2026-06-19 | Removed cross-cloud artifacts, namespaced Terraform paths |
+| Mermaid diagram fixes | 2026-06-19 | Fixed 10 diagrams in `architecture-aws.md` (rendering errors) |
+| Checkov CKV_AWS_* remediation | 2026-06-19 | Resolved 9 failures → 264 passed, 0 failed |
+| CI workflow hardening | 2026-06-19–20 | Graceful handling of missing `AWS_ACCOUNT_ID` in terraform-plan, certcheck, destroy |
+| Enterprise governance setup | 2026-06-20 | 2FA, CODEOWNERS, PR templates, review gate, SECURITY.md, Dependabot |
+| Dependency updates (AWS) | 2026-06-20 | 15 Dependabot PRs merged — Actions, Terraform provider, Python deps |
+| Dependency updates (GCP) | 2026-06-20 | 12 Dependabot PRs merged — Actions, Terraform providers, Python deps |
+| Org 2FA enforcement | 2026-06-20 | Secure methods only (authenticator app/passkey — SMS blocked) |
 
 ## Pending Action Items
 
@@ -110,5 +168,4 @@ The AWS and GCP deployment tracks are fully separated into dedicated repositorie
 |---|---|---|
 | Upgrade to GitHub Team plan | High | $4/user/month — unlocks native branch protection on private repos |
 | Configure `AWS_ACCOUNT_ID` secret | High | Required for terraform plan, compliance checks, and deploy workflows |
-| Merge 12 open Dependabot PRs on `alberta-emr-gcp` | Medium | Review and merge dependency updates |
 | Set up `medivo_emr` repo visibility review | Medium | Confirm public visibility is intentional for this repo |
