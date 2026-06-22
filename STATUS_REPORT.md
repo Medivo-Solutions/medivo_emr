@@ -1,6 +1,6 @@
 # Medivo UDHP — GitHub Platform Status Report
 
-**Date:** 2026-06-20 (Updated) | **Organization:** [Medivo-Solutions](https://github.com/Medivo-Solutions) | **Plan:** GitHub Free (2 members)
+**Date:** 2026-06-22 (Updated) | **Organization:** [Medivo-Solutions](https://github.com/Medivo-Solutions) | **Plan:** GitHub Free (2 members)
 
 ---
 
@@ -28,7 +28,7 @@ All services follow a consistent pattern: Python 3.11, FastAPI, port 8080, `/hea
 | Service | AWS Implementation | GCP Implementation | Files |
 |---|---|---|---|
 | **fhir_gateway** | HealthLake via boto3 SigV4, JWT validation, consent checks | Cloud Healthcare API with service account auth | main.py, Dockerfile, requirements.txt |
-| **ai_scribe** | Bedrock Claude 3.5 Sonnet, PHI guardrail | Vertex AI Gemini 1.5 Pro | main.py, bedrock_provider.py, Dockerfile, requirements.txt |
+| **ai_scribe** | Bedrock Claude 3.5 Sonnet, PHI guardrail | Vertex AI Med-Gemini 3.1 Pro (fallback: Gemini 3.1 Pro) via `google-genai` SDK | main.py, Dockerfile, requirements.txt |
 | **iam_rbac** | Cognito JWKS JWT validation, SMART-on-FHIR scopes | Firebase/Identity Platform x509 cert validation | main.py, Dockerfile, requirements.txt |
 | **consent_manager** | FHIR R4 Consent (treatment, research, disclosure, BTG), CloudWatch audit | Same + google-cloud-logging audit | main.py, Dockerfile, requirements.txt |
 | **hl7_ingest** | HL7 v2 parsing (ADT-A01/A08/A40), PID extraction, FHIR Patient conversion | Same (cloud-agnostic logic) | main.py, Dockerfile, requirements.txt |
@@ -265,6 +265,7 @@ Next.js 14 (upgraded to 15.5.18 via Dependabot), React 18, TypeScript, Tailwind 
 | **Trivy CVE fix** | 2026-06-20 | Added `ignore-unfixed: true` to Trivy scan; added 4 missing services to container-scan matrix |
 | **Next.js upgrade** | 2026-06-20 | Dependabot PR merged — Next.js 14.2.15 -> 15.5.18 (both repos) |
 | **Workflow permissions** | 2026-06-20 | GITHUB_TOKEN default set to write (org + both repos); PR review approval enabled |
+| **AI Scribe model + SDK fix** | 2026-06-22 | GCP: migrated from deprecated `vertexai.generative_models` (removed June 24, 2026) to `google-genai` SDK; model updated from shutdown `gemini-1.5-pro` to `med-gemini-3.1-pro` with `gemini-3.1-pro` fallback. Both repos: removed dead `bedrock_provider.py` cross-platform artifact |
 
 ## Pending Action Items
 
